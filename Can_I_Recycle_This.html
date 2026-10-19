@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>永春國小資源回收大冒險｜臺中市資源回收智慧查詢系統</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background-color: #e0f2fe;
+      background-image:
+        radial-gradient(#bae6fd 2px, transparent 2px),
+        linear-gradient(180deg, #e0f2fe 0%, #fef9c3 55%, #dcfce7 100%);
+      background-size: 28px 28px, 100% 100%;
+      color: #1e293b;
+    }
+    .nintendo-card {
+      border: 3px solid #1e3a8a;
+      box-shadow: 0 6px 0 #1e3a8a;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .nintendo-card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #1e3a8a;
+    }
+    .nintendo-card-hover:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #1e3a8a;
+    }
+    .nintendo-btn {
+      border: 2.5px solid #1e293b;
+      box-shadow: 0 4px 0 #1e293b;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .nintendo-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 #1e293b;
+    }
+    .nintendo-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #1e293b;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- 頂部導覽列 -->
+  <header class="bg-blue-700 text-white sticky top-0 z-30 border-b-4 border-blue-950 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-amber-400 border-2 border-slate-900 shadow-[0_3px_0_#0f172a] flex items-center justify-center text-2xl font-bold text-slate-900 shrink-0">
+          🏰
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow">永春國小・資源回收大冒險</h1>
+            <span class="text-xs bg-amber-300 text-slate-900 px-2.5 py-0.5 rounded-full font-extrabold border-2 border-slate-900">臺中市環保局規範 × 城堡校園版</span>
+          </div>
+          <p class="text-xs text-sky-100 hidden sm:block font-medium">跟著環保小尖兵與回收小精靈，輕鬆學會分類與處理步驟！</p>
+        </div>
+      </div>
+
+      <!-- 右側選單 -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="hidden md:flex items-center gap-1.5 bg-blue-950/80 px-3 py-1.5 rounded-2xl border-2 border-amber-400 text-xs font-extrabold text-amber-300">
+          <span>⭐ 環保星星：</span>
+          <span id="ecoStarCount" class="text-white text-sm">12</span>
+          <span id="ecoRankBadge" class="ml-1 px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[11px]">永春小勇者</span>
+        </div>
+
+        <nav class="flex items-center bg-blue-950/80 p-1.5 rounded-2xl border-2 border-blue-900 text-xs sm:text-sm gap-1">
+          <button id="navSearchBtn" type="button" class="px-3 py-1.5 rounded-xl font-extrabold transition bg-amber-400 text-slate-950 border-2 border-slate-900 shadow-sm">
+            🔍 文字與分類查詢
+          </button>
+          <button id="navCameraBtn" type="button" class="px-3 py-1.5 rounded-xl font-bold transition text-sky-100 hover:text-white">
+            📷 拍照/圖片辨識
+          </button>
+          <button id="navGuideBtn" type="button" class="px-3 py-1.5 rounded-xl font-bold transition text-sky-100 hover:text-white">
+            📖 回收說明百科
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主視覺與搜尋區 -->
+  <section class="relative bg-gradient-to-b from-blue-600 via-sky-500 to-sky-400 text-white overflow-hidden border-b-4 border-blue-950">
+    <div class="max-w-6xl mx-auto px-4 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <div class="lg:col-span-7 space-y-4 z-10">
+        <div class="inline-flex flex-wrap items-center gap-2 px-3.5 py-1 rounded-full bg-white text-blue-900 border-2 border-slate-900 shadow-[0_3px_0_#0f172a] text-xs font-extrabold">
+          <span>🏰 舞台：臺中市南屯區永春國小</span>
+          <span class="text-emerald-700">｜適用臺中市 29 行政區</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black leading-snug drop-shadow">
+          手邊的物品是哪位「回收小精靈」？<br class="hidden sm:inline" />
+          <span class="text-amber-300 underline decoration-wavy decoration-amber-300/80">輸入名字或拍照，幫它找到正確的家！</span>
+        </h2>
+
+        <!-- 搜尋與拍照操作區 -->
+        <div class="bg-white p-2.5 rounded-2xl border-3 border-slate-900 shadow-[0_6px_0_#0f172a] flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div class="relative flex-1 flex items-center">
+            <span class="pl-3 text-blue-600 text-xl">🔎</span>
+            <input id="searchInput" type="text" placeholder="輸入物品名稱（如：便當盒、泡泡紙...）" class="w-full pl-2 pr-8 py-2.5 text-slate-900 font-bold placeholder-slate-400 focus:outline-none" />
+          </div>
+          <div class="flex items-center gap-2">
+            <!-- 拍照按鈕 -->
+            <button id="heroPhotoBtn" type="button" class="nintendo-btn flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm">
+              <span>📷</span>
+              <span>拍照查分類</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 隱藏的實體檔案上傳器 -->
+        <input type="file" id="imageUploader" accept="image/*" capture="environment" class="hidden" />
+
+        <!-- 快速關鍵字 -->
+        <div class="flex flex-wrap items-center gap-1.5 text-xs">
+          <span class="text-white font-extrabold drop-shadow">🌟 常問：</span>
+          <button type="button" data-quick-term="便當盒" class="quick-keyword px-3 py-1 rounded-full bg-white text-slate-900 hover:bg-amber-200 border-2 border-slate-900 font-extrabold shadow-[0_2px_0_#0f172a] transition">🍱 紙便當盒</button>
+          <button type="button" data-quick-term="電子發票" class="quick-keyword px-3 py-1 rounded-full bg-white text-slate-900 hover:bg-amber-200 border-2 border-slate-900 font-extrabold shadow-[0_2px_0_#0f172a] transition">🧾 電子發票</button>
+        </div>
+      </div>
+
+      <!-- 右側圖片區 -->
+      <div class="lg:col-span-5">
+        <div class="nintendo-card rounded-3xl overflow-hidden bg-slate-900">
+          <div class="relative">
+			      <img src="Can_I_Recycle_This_BG.PNG" alt="永春國小" class="w-full h-52 sm:h-64 object-cover max-w-full" />
+            <div class="absolute top-3 left-3 bg-amber-400 text-slate-950 text-xs font-black px-3 py-1 rounded-full border-2 border-slate-900 shadow">
+              🎮 永春國小環保小隊出動！
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 辨識結果彈出視窗 (Modal) -->
+  <div id="resultModal" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 rounded-3xl border-4 border-blue-900 shadow-[0_8px_0_#1e3a8a] max-w-md w-full text-center">
+      
+      <!-- 載入中狀態 -->
+      <div id="loadingState" class="hidden flex-col items-center py-6">
+        <div class="text-6xl animate-bounce mb-4">📷</div>
+        <h3 class="text-xl font-black text-slate-800">回收小精靈正在辨識中...</h3>
+        <p class="text-sm text-slate-500 mt-2">請稍候，正在連線 AI 引擎分析</p>
+      </div>
+
+      <!-- 辨識完成狀態 -->
+      <div id="resultState" class="hidden flex-col items-center py-2">
+        <h3 class="text-2xl font-black text-blue-700 mb-4">✨ 辨識完成！ ✨</h3>
+        <p class="text-lg font-bold text-slate-700 mb-2">這件物品是：</p>
+        
+        <!-- AI 回傳結果顯示區 -->
+        <div id="aiResultText" class="text-2xl sm:text-3xl font-black text-amber-600 mb-6 bg-amber-50 p-4 rounded-xl border-2 border-amber-300 w-full break-words">
+          <!-- 辨識結果會寫入這裡 -->
+        </div>
+
+        <button id="closeModalBtn" class="nintendo-btn px-8 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 font-black text-lg w-full">
+          確認並關閉
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- 節點抓取 ---
+    const navCameraBtn = document.getElementById('navCameraBtn');
+    const heroPhotoBtn = document.getElementById('heroPhotoBtn');
+    const imageUploader = document.getElementById('imageUploader');
+    
+    const resultModal = document.getElementById('resultModal');
+    const loadingState = document.getElementById('loadingState');
+    const resultState = document.getElementById('resultState');
+    const aiResultText = document.getElementById('aiResultText');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const searchInput = document.getElementById('searchInput');
+
+    // --- 點擊畫面上的「拍照」按鈕時，觸發隱藏的上傳元件 ---
+    const triggerCamera = () => {
+      imageUploader.click(); 
+    };
+
+    navCameraBtn.addEventListener('click', triggerCamera);
+    heroPhotoBtn.addEventListener('click', triggerCamera);
+
+    // --- 監聽「圖片上傳」完成的事件 (這裡修正了寫死的邏輯) ---
+    imageUploader.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return; // 如果使用者取消上傳，就直接返回
+
+      // 1. 打開彈出視窗，並切換到「載入中」畫面
+      resultModal.classList.remove('hidden');
+      resultModal.classList.add('flex');
+      loadingState.classList.remove('hidden');
+      loadingState.classList.add('flex');
+      resultState.classList.add('hidden');
+      resultState.classList.remove('flex');
+
+      // 2. 模擬呼叫 AI 辨識 API 
+      // ⚠️ 如果您已經有後端 API (例如 Google Vision 或自己寫的辨識後端)，請將此處替換為 fetch() 或 axios 呼叫。
+      setTimeout(() => {
+        
+        // 為了不讓它「總是便當盒」，我們設計一個測試用陣列，模擬 AI 模型可能回傳的多元分類結果
+        const mockAIResults = [
+          '🥤 塑膠飲料杯類\n(請丟：資源回收)', 
+          '📄 廢紙類\n(請丟：資源回收)', 
+          '🍱 紙便當盒\n(請丟：資源回收 - 需先沖洗)', 
+          '🔋 廢電池\n(請丟：有害資源回收)', 
+          '🥡 髒污塑膠袋\n(請丟：一般垃圾)',
+          '🍎 果皮殘渣\n(請丟：生廚餘)'
+        ];
+        
+        // 隨機選一個模擬 AI 判斷 (實際開發時，改為 res.data.className 之類的值)
+        const recognizedItem = mockAIResults[Math.floor(Math.random() * mockAIResults.length)];
+
+        // 3. 隱藏載入中，顯示辨識結果
+        loadingState.classList.add('hidden');
+        loadingState.classList.remove('flex');
+        resultState.classList.remove('hidden');
+        resultState.classList.add('flex');
+        
+        // 寫入辨識文字 (利用 innerText 支援 \n 換行)
+        aiResultText.innerText = recognizedItem;
+
+        // 4. 清空 uploader 值，讓使用者下次可以重複上傳同一張照片做測試
+        imageUploader.value = '';
+
+      }, 1500); // 模擬 1.5 秒的網路傳輸時間
+    });
+
+    // --- 關閉彈出視窗 ---
+    closeModalBtn.addEventListener('click', () => {
+      resultModal.classList.add('hidden');
+      resultModal.classList.remove('flex');
+    });
+
+    // --- 快速按鈕填入搜尋框 ---
+    document.querySelectorAll('.quick-keyword').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        searchInput.value = e.target.getAttribute('data-quick-term');
+      });
+    });
+  </script>
+</body>
+</html>
